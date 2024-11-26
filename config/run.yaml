@@ -1,0 +1,228 @@
+#######################################################################################################
+# FILE/DIRECTORY PATHS
+#######################################################################################################
+file paths:
+  metadata:
+    all tsv: metadata/ENCODE_13.05.2020_full.tsv
+    filtered tsv: metadata/ENCODE_13.05.2020_filtered.tsv
+    filtered db: metadata/ENCODE_13.05.2020_filtered.db
+  data directory: ../data_sets
+  reference:
+    transcriptome fasta: ../reference/Ensembl.Homo_sapiens.GRCh38.cdna.ncrna.fa
+    chromosome lengths: ../reference/NCBI.Homo_sapiens.GRCh38.chromosome_lengths.tsv
+    genes: ../reference/Ensembl.Homo_sapiens.GRCh38.p12.definitions.tsv
+    gene intervals: ../reference/Ensembl.Homo_sapiens.GRCh38.p12.definitions.bed
+    regulation: ../reference/Homo_sapiens.regulation.new.tsv
+  gene definitions:
+    epd tss: ../reference/gene_definitions/EPD.Homo_sapiens.GRCh38.TSS.single.bed
+    ensembl definitions: ../reference/gene_definitions/Ensembl.Homo_sapiens.GRCh38.p12.gene_definitions.tsv
+    ensembl annotations: ../reference/gene_definitions/Ensembl.Homo_sapiens.GRCh38.p12.GO_annotations.tsv
+    ensembl miRNAs: ../reference/gene_definitions/Ensembl.Homo_sapiens.GRCh38.p12.miRNA_IDs.tsv
+    ensembl bed: ../reference/gene_definitions/Ensembl.Homo_sapiens.GRCh38.p12.definitions.bed
+    ensembl intersect: ../reference/gene_definitions/Ensembl.Homo_sapiens.GRCh38.p12.motif_intersection.bed
+    miriad host genes inter: ../reference/gene_definitions/miRIAD.intergenic.miRNA.host.genes.tsv
+    miriad host genes intra: ../reference/gene_definitions/miRIAD.intragenic.miRNA.host.genes.tsv
+    fantom mirna promoter: ../reference/gene_definitions/FANTOM5.Homo_sapiens.GRCh37.miRNA.promoters.excluding.novel.tsv
+    fantom bed hg38: ../reference/gene_definitions/FANTOM5.Homo_sapiens.GRCh38.miRNA.promoters.bed
+    fantom bed hg19: ../reference/gene_definitions/FANTOM5.Homo_sapiens.GRCh37.miRNA.promoters.bed
+    overview log: ../reference/gene_definitions/gene.log.txt
+  rna seq quantification:
+    salmon: ../../tools/bin/salmon
+    salmon index: ../reference/Homo_sapiens.GRCh38.cdna.ncrna_index
+    logs: ../expression_analysis/quantification/logs
+    results: ../expression_analysis/quantification/results
+  differential expression analysis:
+    script: ../expression_analysis/de_analysis.R
+    transcript mapping: ../expression_analysis/differential/transcript_mapping.tsv
+    design tables: ../expression_analysis/differential/designs
+    results: ../expression_analysis/differential/results
+    logs: ../expression_analysis/differential/logs
+  differential histone:
+    quantification:
+      results: ../histone_analysis/quantification/results
+      logs: ../histone_analysis/quantification/logs
+      stats: ../histone_analysis/quantification/stats
+      merged: ../histone_analysis/quantification/merged_files
+      intermediate: ../histone_analysis/quantification/intermediate_results
+      histoneHMM: ../histone_analysis/histoneHMM_call_regions.R
+    bam stat db: ../histone_analysis/bam_stats.db
+    pre-processing:
+      results: ../histone_analysis/pre_processing/results
+      logs: ../histone_analysis/pre_processing/logs
+      intermediate: ../histone_analysis/pre_processing/intermediate_results
+      stats: ../histone_analysis/pre_processing/stats
+    differential:
+      results: ../histone_analysis/differential/results
+      logs: ../histone_analysis/differential/logs
+      histoneHMM: ../histone_analysis/histoneHMM_call_differential.R
+  analysis:
+    result dir: ../analysis/results/
+    preprocessing dir: ../analysis/preprocessing
+    pickle dir: ../analysis/preprocessing/pickle
+    motif overview: ../analysis/results/motif.overview_edges={0}.tsv
+    rewire script: randomise.R
+
+#######################################################################################################
+# FILE NAMES
+#######################################################################################################
+file names:
+  download name components:
+    - experiment accession
+    - biological replicate(s)
+    - technical replicate(s)
+    - run type
+    - file accession
+    - paired with
+  quantification name components:
+    merge:
+      - experiment accession
+      - biological replicate(s)
+      - run type
+    no merge:
+      - experiment accession
+      - biological replicate(s)
+      - technical replicate(s)
+      - run type
+  histone name components:
+    merge:
+      - experiment accession
+      - biological replicate(s)
+      - experiment target
+    no merge:
+      - experiment accession
+      - biological replicate(s)
+      - technical replicate(s)
+      - experiment target
+
+
+#######################################################################################################
+# ANALYSIS
+#######################################################################################################
+analysis:
+  expression fdr: 0.05
+  motif p: 0.05
+  motif fdr: 0.05
+  correlation p: 0.05
+  correlation fdr: 0.05
+  posterior threshold: 0.5
+  promoter start: -2000
+  promoter end: 500
+  mirna promoter start: -2000
+  mirna promoter end: 500
+  number networks: 5000
+  minimum number: 20
+  minimum number composite: 10
+  manager:
+    edge types:
+      - experimental
+    differential:
+      - False
+      - True
+    motifs:
+      - co-regulatory
+      - TF
+      - miRNA
+      - composite
+    regions:
+      - promoter
+      - gene
+    interaction types:
+      - tf-gene
+      - tf-mirna
+      - tf-tf
+      - mirna-tf
+      - mirna-gene
+      - mirna-mirna
+
+
+#######################################################################################################
+# DIFFERENTIAL HISTONE ANALYSIS
+#######################################################################################################
+differential histone analysis:
+  bin size: 1000
+  probability: 0.5
+
+#######################################################################################################
+# DIFFERENTIAL GENE EXPRESSION ANALYSIS
+#######################################################################################################
+differential expression analysis:
+  p-value threshold: 0.05
+
+#######################################################################################################
+# TRANSITIONS
+#######################################################################################################
+transitions:
+  - H1.hESC --> GM23338
+  - common.myeloid.progenitor.CD34.positive --> CD14.positive.monocyte
+  - mesenchymal.stem.cell --> osteoblast
+  - neural.stem.progenitor.cell --> neural.progenitor.cell
+  - neural.progenitor.cell --> bipolar.neuron
+  - neural.stem.progenitor.cell --> bipolar.neuron
+
+#######################################################################################################
+# RNA-SEQ QUANTIFICATION
+#######################################################################################################
+rna seq quantification:
+  number cores: 16
+  number bootstraps: 100
+  incompatible prior: 0.0
+
+#######################################################################################################
+# DOWNLOAD SETTINGS
+#######################################################################################################
+download:
+  number retries: 5
+  allowed file status:
+    - released
+    - archived
+  allowed audit errors:
+    - ''
+  allowed audit not compliant:
+    - ''
+  disallowed audit warnings: []
+  disallowed audit internal action: []
+  allowed formats:
+    RNA.seq:
+      reads:
+        - fastq
+
+#######################################################################################################
+# METADATA ADJUSTMENT
+#######################################################################################################
+metadata adjustment:
+  mapping:
+    assay:
+      RNA-seq: RNA.seq
+      CAGE: RNA.CAGE
+      DNA methylation profiling by array assay: methylation.array
+      MRE-seq: methylation.MRE
+      microRNA counts: miRNA.counts
+      microRNA-seq: miRNA.seq
+      single cell isolation followed by RNA-seq: RNA.seq.single.cell
+      transcription profiling by array assay: RNA.array
+      whole-genome shotgun bisulfite sequencing: methylation.WGBS
+      RRBS: methylation.RRBS
+      ChIP-seq: ChIP.seq
+  remove:
+    experiment target:
+      - '-human'
+
+#######################################################################################################
+# METADATA FILTER
+#######################################################################################################
+metadata filter:
+  include:
+    assay:
+      - RNA.seq
+      - RNA.seq.single.cell
+    file format:
+      - fastq
+    run type:
+      - paired
+  exclude:
+    file format:
+      - ''
+    file accession:
+      - ''
+    size:
+      - ''
